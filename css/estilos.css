@@ -45,11 +45,14 @@ LOADER
     align-items:center;
     z-index:9999;
     transition:opacity 1s;
+    overflow:hidden;
 }
 
 .loader-content{
     text-align:center;
     color:white;
+    position:relative;
+    z-index:2;
 }
 
 .loader-content h2{
@@ -92,6 +95,10 @@ PORTADA
 
     align-items:center;
 
+    position:relative;
+
+    overflow:hidden;
+
 }
 
 .overlay{
@@ -115,6 +122,10 @@ PORTADA
     color:white;
 
     padding:30px;
+
+    position:relative;
+
+    z-index:2;
 
 }
 
@@ -274,7 +285,7 @@ ALAHIA
 
     width:340px;
 
-    margin:70px auto 0;
+    margin:0 auto;
 
     animation:flotar 4s ease-in-out infinite;
 
@@ -429,6 +440,22 @@ button{
 .tiempo span{
 
     font-size:40px;
+
+}
+
+.hero::before{
+
+    width:560px;
+
+    height:560px;
+
+}
+
+.divisor-huellas{
+
+    gap:26px;
+
+    font-size:20px;
 
 }
 
@@ -739,4 +766,258 @@ OCULTAR CONTENIDO
 
     transition:opacity 1.2s ease;
 
+}
+
+/*======================================================
+ESTILO REY LEÓN — ANIMACIONES EXTRA
+(no toca la estructura ni colores originales, solo suma)
+======================================================*/
+
+/* Respeta accesibilidad si el usuario pide menos movimiento */
+@media (prefers-reduced-motion: reduce){
+    *,
+    *::before,
+    *::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+    }
+}
+
+/* --- Loader: amanecer en la sabana --- */
+#loader::before{
+    content:"";
+    position:absolute;
+    bottom:-42%;
+    left:50%;
+    width:520px;
+    height:520px;
+    border-radius:50%;
+    background:radial-gradient(circle, #F3C969 0%, #C9862F 45%, transparent 72%);
+    transform:translateX(-50%);
+    filter:blur(6px);
+    animation:amanecer 3.4s ease-in-out infinite alternate;
+    z-index:1;
+}
+
+@keyframes amanecer{
+    0%{ transform:translate(-50%,25px); opacity:.5; }
+    100%{ transform:translate(-50%,-20px); opacity:1; }
+}
+
+.loader-content h2{
+    animation:brilloTexto 2.2s ease-in-out infinite;
+}
+
+@keyframes brilloTexto{
+    0%,100%{ text-shadow:0 0 8px rgba(216,179,106,.4); }
+    50%{ text-shadow:0 0 22px rgba(216,179,106,.9); }
+}
+
+/* --- Hero: rayos de sol girando lentamente (Círculo de la Vida) --- */
+.hero::before{
+    content:"";
+    position:absolute;
+    top:-18%;
+    left:50%;
+    width:900px;
+    height:900px;
+    transform:translateX(-50%);
+    background:conic-gradient(
+        from 0deg,
+        transparent 0deg, rgba(230,180,90,.20) 8deg, transparent 16deg,
+        transparent 40deg, rgba(230,180,90,.20) 48deg, transparent 56deg,
+        transparent 90deg, rgba(230,180,90,.20) 98deg, transparent 106deg,
+        transparent 140deg, rgba(230,180,90,.20) 148deg, transparent 156deg,
+        transparent 190deg, rgba(230,180,90,.20) 198deg, transparent 206deg,
+        transparent 240deg, rgba(230,180,90,.20) 248deg, transparent 256deg,
+        transparent 290deg, rgba(230,180,90,.20) 298deg, transparent 306deg,
+        transparent 340deg, rgba(230,180,90,.20) 348deg, transparent 356deg
+    );
+    border-radius:50%;
+    animation:girarRayos 70s linear infinite;
+    pointer-events:none;
+    z-index:1;
+}
+
+@keyframes girarRayos{
+    from{ transform:translateX(-50%) rotate(0deg); }
+    to{ transform:translateX(-50%) rotate(360deg); }
+}
+
+/* Título del hero apareciendo palabra por palabra */
+.overlay h1 .palabra{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(30px);
+    animation:aparecePalabra .8s ease forwards;
+}
+
+@keyframes aparecePalabra{
+    to{ opacity:1; transform:translateY(0); }
+}
+
+/* Brillo que recorre el botón de inicio */
+button#btnComenzar{
+    position:relative;
+    overflow:hidden;
+}
+
+button#btnComenzar::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-150%;
+    width:55%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:skewX(-20deg);
+    animation:brilloBoton 3.4s ease-in-out infinite;
+}
+
+@keyframes brilloBoton{
+    0%{ left:-150%; }
+    55%{ left:150%; }
+    100%{ left:150%; }
+}
+
+/* --- Polvo dorado flotante (generado por JS en toda la página) --- */
+.polvo-dorado{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:5;
+    overflow:hidden;
+}
+
+.particula{
+    position:absolute;
+    bottom:-10px;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:radial-gradient(circle, #F3D98A 0%, rgba(243,217,138,0) 70%);
+    animation:flotarParticula linear forwards;
+    opacity:0;
+}
+
+@keyframes flotarParticula{
+    0%{ opacity:0; transform:translate(0,0) scale(.6); }
+    10%{ opacity:.9; }
+    90%{ opacity:.6; }
+    100%{ opacity:0; transform:translate(var(--desvio,20px), -110vh) scale(1.1); }
+}
+
+/* --- Nombre del bebé: resplandor dorado tipo sol --- */
+.nombre-bebe h2.nombre{
+    position:relative;
+    z-index:2;
+    background:linear-gradient(100deg,#9B6332 30%,#F3D98A 50%,#9B6332 70%);
+    background-size:220% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:brilloDorado 4.5s linear infinite;
+}
+
+@keyframes brilloDorado{
+    to{ background-position:220% center; }
+}
+
+.nombre-bebe h2.nombre::before{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:260px;
+    height:260px;
+    background:radial-gradient(circle, rgba(243,217,138,.5) 0%, transparent 70%);
+    transform:translate(-50%,-50%);
+    z-index:-1;
+    animation:pulsoResplandor 3.5s ease-in-out infinite;
+}
+
+@keyframes pulsoResplandor{
+    0%,100%{ opacity:.5; transform:translate(-50%,-50%) scale(.9); }
+    50%{ opacity:1; transform:translate(-50%,-50%) scale(1.15); }
+}
+
+/* Halo giratorio detrás de la leoncita */
+.halo-leon{
+    position:relative;
+    width:340px;
+    margin:70px auto 0;
+}
+
+.halo-leon::before{
+    content:"";
+    position:absolute;
+    inset:-20px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, #F3D98A, #C9862F, #F3D98A, #C9862F, #F3D98A);
+    animation:girarHalo 9s linear infinite;
+    filter:blur(3px);
+    opacity:.55;
+    z-index:0;
+}
+
+.halo-leon .leoncita{
+    position:relative;
+    z-index:1;
+    margin:0 auto;
+}
+
+@keyframes girarHalo{
+    to{ transform:rotate(360deg); }
+}
+
+/* --- Divisores de huellas entre secciones --- */
+.divisor-huellas{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    padding:15px 0;
+    font-size:26px;
+    background:transparent;
+}
+
+.divisor-huellas span{
+    opacity:.6;
+    animation:huellaSalta 2.4s ease-in-out infinite;
+}
+
+.divisor-huellas span:nth-child(2){ animation-delay:.2s; }
+.divisor-huellas span:nth-child(3){ animation-delay:.4s; }
+
+@keyframes huellaSalta{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-8px); }
+}
+
+/* --- Tarjeta de evento: interacción más viva --- */
+.dato{
+    transition:transform .35s;
+}
+
+.dato:hover{
+    transform:translateY(-6px);
+}
+
+.dato span{
+    transition:transform .35s;
+    display:block;
+}
+
+.dato:hover span{
+    transform:scale(1.15) rotate(-6deg);
+}
+
+/* --- Contador: resplandor pulsante --- */
+.tiempo{
+    animation:respiraTiempo 3s ease-in-out infinite;
+}
+
+@keyframes respiraTiempo{
+    0%,100%{ box-shadow:0 15px 35px rgba(0,0,0,.15); }
+    50%{ box-shadow:0 15px 45px rgba(216,168,95,.55); }
 }
